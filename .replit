@@ -1,1 +1,30 @@
-bW9kdWxlcyA9IFsibm9kZWpzLTI0Il0KCltbYXJ0aWZhY3RzXV0KaWQgPSAiYXJ0aWZhY3RzL2FwaS1zZXJ2ZXIiCgpbW2FydGlmYWN0c11dCmlkID0gImFydGlmYWN0cy9tb2NrdXAtc2FuZGJveCIKCltkZXBsb3ltZW50XQpyb3V0ZXIgPSAiYXBwbGljYXRpb24iCmRlcGxveW1lbnRUYXJnZXQgPSAiYXV0b3NjYWxlIgoKW2RlcGxveW1lbnQucG9zdEJ1aWxkXQphcmdzID0gWyJwbnBtIiwgInN0b3JlIiwgInBydW5lIl0KZW52ID0geyAiQ0kiID0gInRydWUiIH0KClt3b3JrZmxvd3NdCnJ1bkJ1dHRvbiA9ICJQcm9qZWN0IgoKW2FnZW50XQpzdGFjayA9ICJQTlBNX1dPUktTUEFDRSIKZXhwZXJ0TW9kZSA9IHRydWUKCltwb3N0TWVyZ2VdCnBhdGggPSAic2NyaXB0cy9wb3N0LW1lcmdlLnNoIgp0aW1lb3V0TXMgPSAyMDAwMAo=
+[run]
+command = "bash setup.sh && pnpm --filter @workspace/api-server run dev"
+
+[[artifacts]]
+id = "artifacts/api-server"
+
+[[artifacts]]
+id = "artifacts/job-tracker"
+
+[[artifacts]]
+id = "artifacts/mockup-sandbox"
+
+[deployment]
+router = "application"
+deploymentTarget = "autoscale"
+
+[deployment.postBuild]
+args = ["pnpm", "store", "prune"]
+env = { "CI" = "true" }
+
+[workflows]
+runButton = "Project"
+
+[agent]
+stack = "PNPM_WORKSPACE"
+expertMode = true
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000
